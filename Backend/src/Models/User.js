@@ -63,6 +63,13 @@ userSchema.methods.correctPassword = async function(candidatePassword, userPassw
   return await bcrypt.compare(candidatePassword, userPassword);
 };
 
+userSchema.methods.createAuthToken = function() {
+  const token = jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_EXPIRES_IN
+  });
+  return token;
+};
+
 const User = mongoose.model('User', userSchema);
 
 module.exports = User;
