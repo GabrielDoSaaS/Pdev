@@ -1,0 +1,128 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f5f5f5;
+    padding: 20px;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.title {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: #111827;
+    margin-bottom: 8px;
+}
+
+.subtitle {
+    color: #6b7280;
+    font-size: 1.1rem;
+}
+
+.plansGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    width: 100%;
+    max-width: 900px;
+}
+
+.planCard {
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.planCard:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.planHeader {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.planTitle {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #111827;
+    margin-bottom: 8px;
+}
+
+.planPrice {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #000000;
+}
+
+.priceValue {
+    font-size: 2.5rem;
+}
+
+.pricePeriod {
+    font-size: 1rem;
+    font-weight: 400;
+    color: #6b7280;
+    margin-left: 4px;
+}
+
+.planFeatures {
+    display: flex;
+    flex-direction: column;
+    gap: 8px; /* O espaço entre as vantagens dos planos foi diminuído de 12px para 8px */
+    margin-bottom: 24px; /* Também diminui a margem inferior para compensar */
+}
+
+.featureItem {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #4b5563;
+    font-size: 0.95rem;
+}
+
+.checkIcon {
+    color: #10b981;
+}
+
+.selectPlanButton {
+    width: 100%;
+    background: #000000;
+    color: white;
+    border: none;
+    padding: 14px;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.selectPlanButton:hover {
+    background: #111827;
+}
+
+.highlightButton {
+    background: #24292e;
+}
+
+.highlightButton:hover {
+    background: #111827;
+}
+
+@media (max-width: 768px) {
+    .plansGrid {
+        grid-template-columns: 1fr;
+    }
+}

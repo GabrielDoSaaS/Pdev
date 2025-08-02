@@ -29,6 +29,8 @@ const CreateRepositoryInGithub = async ( req, res ) => {
         const response = await axios.post(apiUrl, data, config);
         console.log(`Repositório '${response.data.name}' criado com sucesso!`);
         console.log(`URL: ${response.data.html_url}`);
+
+        res.send(response.data.html_url);
     } catch (error) {
         if (error.response) {
             console.error('Erro ao criar o repositório:', error.response.data.message);
