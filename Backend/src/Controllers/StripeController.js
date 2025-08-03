@@ -5,19 +5,19 @@ const CreatePayment = async (req, res) => {
         const paymentIntent = await stripe.paymentIntents.create({
             amount: 10.0, 
             currency: 'usd', 
-            payment_method_types: ['card']
+            payment_method_types: ['card']  
         })
 
-        res.status(200).json({
-            clientSecret: paymentIntent.client_secret,
-        });
+        res.status(200).json({  
+            clientSecret: paymentIntent.client_secret,  
+        }); 
 
     } catch (error) {
-        console.error('Erro ao criar o PaymentIntent:', error);
-        res.status(500).json({
-            error: 'Ocorreu um erro no servidor.',
-        });
-    }
-};
+        console.error('Erro ao criar o PaymentIntent:', error); 
+        res.status(500).json({  
+            error: 'Ocorreu um erro no servidor.',  
+        }); 
+    }   
+};  
 
 module.exports = {CreatePayment: CreatePayment};
