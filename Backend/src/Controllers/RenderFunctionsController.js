@@ -1,9 +1,7 @@
-const axios = require('axios')
+const axios = require('axios');
+
 const CreateStaticSite = async ( req, res ) => {
-    const {repositoryName, repoUrl, branch} = req.body;
-
-
-    if (!process.env.RENDER_API_KEY) {
+    const {repositoryName, repoUrl, branch} = req.body;    if (!process.env.RENDER_API_KEY) {
         console.error('RENDER_API_KEY não está definida nas variáveis de ambiente.');
         res.status(401);
         return;
