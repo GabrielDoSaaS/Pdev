@@ -111,16 +111,14 @@ const htmlContent = `<!DOCTYPE html>
 const CreateRepositoryInGithub = async (req, res) => {
     const { repoName, description } = req.body;
 
-    // 1. Primeiro cria o repositório
     const repoData = {
         name: repoName,
         description: description,
         private: false,
-        auto_init: true // Isso cria um README.md inicial
+        auto_init: true
     };
 
     try {
-        // Cria o repositório
         const repoResponse = await axios.post(apiUrl, repoData, config);
         console.log(`Repositório '${repoResponse.data.name}' criado com sucesso!`);
         
@@ -129,16 +127,11 @@ const CreateRepositoryInGithub = async (req, res) => {
         const refsUrl = `https://api.github.com/repos/${repoFullName}/git/refs`;
         const treesUrl = `https://api.github.com/repos/${repoFullName}/git/trees`;
         
-        // 2. Cria a estrutura de arquivos
-        // Primeiro obtém o SHA do commit mais recente
         const mainRef = await axios.get(`${refsUrl}/heads/main`, config);
         const latestCommitSha = mainRef.data.object.sha;
-        
-        // Obtém o tree do commit mais recente
         const latestCommit = await axios.get(`${commitsUrl}/${latestCommitSha}`, config);
         const baseTreeSha = latestCommit.data.tree.sha;
         
-        // Cria um novo tree com nossa estrutura de arquivos
         const newTree = {
             base_tree: baseTreeSha,
             tree: [
@@ -151,11 +144,9 @@ const CreateRepositoryInGithub = async (req, res) => {
             ]
         };
         
-        // Cria o novo tree no GitHub
         const treeResponse = await axios.post(treesUrl, newTree, config);
         const newTreeSha = treeResponse.data.sha;
         
-        // Cria um novo commit
         const newCommit = {
             message: "Adiciona estrutura inicial com pasta public",
             parents: [latestCommitSha],
@@ -165,7 +156,6 @@ const CreateRepositoryInGithub = async (req, res) => {
         const commitResponse = await axios.post(commitsUrl, newCommit, config);
         const newCommitSha = commitResponse.data.sha;
         
-        // Atualiza a referência main para apontar para o novo commit
         await axios.patch(`${refsUrl}/heads/main`, {
             sha: newCommitSha,
             force: true

@@ -1,3 +1,4 @@
+const axios = require('axios')
 const CreateStaticSite = async ( req, res ) => {
     const {repositoryName, repoUrl, branch} = req.body;
 
