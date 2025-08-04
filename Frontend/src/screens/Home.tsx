@@ -1,6 +1,5 @@
 import styles from "./Home.module.css";
 import { FiGithub } from "react-icons/fi";
-import { FaLaptopCode } from "react-icons/fa";
 
 const Home = () => {
     return (

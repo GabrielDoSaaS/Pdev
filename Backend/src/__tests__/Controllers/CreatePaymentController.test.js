@@ -10,7 +10,6 @@ jest.mock('stripe', () => {
   return jest.fn(() => mStripe);
 });
 
-
 process.env.STRIPE_SECRET_KEY = 'Stripe-api-key';
 
 describe('CreatePayment Controller', () => {

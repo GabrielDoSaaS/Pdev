@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { FiUser, FiMail, FiLock, FiCheck } from "react-icons/fi";
-
+import axios from 'axios';
 import styles from "./Register.module.css";
 
 const registerSchema = z.object({
@@ -39,7 +39,11 @@ const Register = () => {
 
   const onSubmit = async (data: RegisterFormData) => {
     console.log("Dados do formulário:", data);
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    
+    await axios.post('http://localhost:3000/register', data, {
+      headers: {"Content-Type": "application/json"}
+    }).then((response)=>{console.log(response.data)})
+
     alert("Cadastro realizado com sucesso!");
   };
 
