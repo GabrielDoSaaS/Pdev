@@ -1,7 +1,7 @@
 const User = require('../Models/User');
 const AppError = require('../utils/AppError');
 const catchAsync = require('../utils/catchAsync');
-const jwt = require('jsonwebtoken');
+
 
 const LoginController = () => {
   const login = catchAsync(async (req, res, next) => {
