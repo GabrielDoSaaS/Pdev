@@ -14,3 +14,5 @@ ConnectToDb(MONGODB_URI||"mongodb://localhost:27017/Pdev");
 app.listen(3000, ( ) => {
     console.log('server is running');
 })
+
+module.exports = app
