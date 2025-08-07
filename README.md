@@ -62,3 +62,36 @@ Stack moderna e robusta para performance e escalabilidade:
 ### 📱 Responsividade Avançada
 **Problema**: Layouts complexos em diferentes dispositivos  
 **Solução**: Componentes adaptativos + testes com BrowserStack
+
+## 📡 API Reference
+
+`POST /api/register`
+
+```json
+// Request
+
+{
+  "fullName": "your full name",
+  "email": "youremail@gmail.com",
+  "password": "your-password",
+  "passwordConfirm": "confirm-password",
+  "agreeTerms": "agreeTerms"
+}
+
+// Response (201)
+{
+  "status": "success",
+  "message": "Cadastro realizado com sucesso!",
+  "data": {
+            "fullName": "fullName",
+            "email": "email",
+            "password": "password",
+            "passwordConfirm": "passwordConfirm",
+            "agreeTerms": "agreeTerms"
+        }
+}
+
+
+
+
+
