@@ -1,7 +1,31 @@
 import styles from "./Home.module.css";
 import { FiGithub } from "react-icons/fi";
+import { useState } from "react";
+import { FaMinusCircle, FaPlusCircle } from "react-icons/fa";
 
 const Home = () => {
+    const [githubLinks, setGithubLinks] = useState<string[]>(['']);
+    const [showGithubInputs, setShowGithubInputs] = useState(false);
+
+    const handleAddLink = () => {
+        setGithubLinks([...githubLinks, '']);
+    };
+
+    const handleRemoveLink = (index: number) => {
+        const newLinks = githubLinks.filter((_, i) => i !== index);
+        setGithubLinks(newLinks);
+    };
+
+    const handleLinkChange = (index: number, value: string) => {
+        const newLinks = [...githubLinks];
+        newLinks[index] = value;
+        setGithubLinks(newLinks);
+    };
+
+    const toggleGithubInputs = () => {
+        setShowGithubInputs(!showGithubInputs);
+    };
+
     return (
         <div className={styles.container}>
             <div className={styles.card}>
@@ -21,24 +45,44 @@ const Home = () => {
                 </div>
 
                 <div className={styles.section}>
-                    <h2 className={styles.sectionTitle}>Conecte seu Github</h2>
-                    <button className={styles.githubButton}>
+                    <button className={styles.githubButton} onClick={toggleGithubInputs}>
                         <FiGithub size={20} />
-                        Conectar com Github
+                        Adicione repositórios do GitHub ao portfólio
                     </button>
+                    {showGithubInputs && (
+                        <div className={styles.githubLinksContainer}>
+                            {githubLinks.map((link, index) => (
+                                <div key={index} className={styles.githubInputItem}>
+                                    <input
+                                        type="text"
+                                        placeholder="Link do repositório"
+                                        value={link}
+                                        onChange={(e) => handleLinkChange(index, e.target.value)}
+                                        className={styles.input}
+                                    />
+                                    {githubLinks.length > 1 && (
+                                        <button onClick={() => handleRemoveLink(index)} className={styles.removeButton}>
+                                            <FaMinusCircle size={20} />
+                                        </button>
+                                    )}
+                                </div>
+                            ))}
+                            <button onClick={handleAddLink} className={styles.addButton}>
+                                <FaPlusCircle size={20} /> Adicionar outro repositório
+                            </button>
+                        </div>
+                    )}
                 </div>
 
                 <div className={styles.section}>
                     <h2 className={styles.sectionTitle}>Selecione um template de Layout</h2>
                     <div className={styles.templateCards}>
-                        {/* Card 1: Layout com foto centralizada */}
                         <div className={`${styles.templateCard} ${styles.template1}`}>
                             <div className={styles.templateImagePlaceholder}></div>
                             <h3 className={styles.templateTitle}>Centralizado</h3>
                             <p className={styles.templateDescription}>Layout minimalista com foto e informações principais no centro.</p>
                         </div>
-                        
-                        {/* Card 2: Layout com sidebar */}
+                   
                         <div className={`${styles.templateCard} ${styles.template2}`}>
                             <div className={styles.templateSidebarPlaceholder}></div>
                             <div className={styles.templateContentPlaceholder}></div>
@@ -46,7 +90,6 @@ const Home = () => {
                             <p className={styles.templateDescription}>Layout com menu lateral para navegação entre seções.</p>
                         </div>
 
-                        {/* Card 3: Layout com cabeçalho grande e seções horizontais */}
                         <div className={`${styles.templateCard} ${styles.template3}`}>
                             <div className={styles.templateHeaderPlaceholder}></div>
                             <div className={styles.templateContentPlaceholder}></div>
