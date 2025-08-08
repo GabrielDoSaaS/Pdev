@@ -177,6 +177,56 @@ const CreateRepositoryInGithub = async (req, res) => {
     }
 }
 
+const GetRepoInfo = async (req, res) => {
+    const { repoLink } = req.body;
+
+    const url = new URL(repoLink);
+
+    const pathParts = url.pathname.split('/');
+
+    const owner = pathParts[1];
+    const repo = pathParts[2];
+
+    const repoApiUrl = `https://api.github.com/repos/${owner}/${repo}`;
+
+    console.log('Dono:', owner);   
+    console.log('Repositório:', repo); 
+    console.log('URL da API:', repoApiUrl);
+
+
+    try {
+        const response = await axios.get(repoUrl);
+
+        const repoData = response.data;
+
+        console.log('--- Informações do Repositório ---');
+        console.log(`Nome: ${repoData.name}`);
+        console.log(`Dono: ${repoData.owner.login}`);
+        console.log(`Descrição: ${repoData.description}`);
+        console.log(`URL: ${repoData.html_url}`);
+        console.log(`Estrelas (Stars): ${repoData.stargazers_count}`);
+        console.log(`Licença: ${repoData.license ? repoData.license.name : 'Nenhuma'}`);
+        console.log(`Linguagem Principal: ${repoData.language}`);
+        console.log(`Total de Forks: ${repoData.forks_count}`);
+        console.log(`Data de Criação: ${new Date(repoData.created_at).toLocaleDateString()}`);
+        console.log(`Última Atualização: ${new Date(repoData.updated_at).toLocaleDateString()}`);
+        console.log('------------------------------------');
+
+
+    } catch (error) {
+        if (error.response) {
+            console.error(`Erro: ${error.response.status} - ${error.response.statusText}`);
+            console.error('Mensagem da API:', error.response.data.message);
+        } else {
+            console.error('Erro na requisição:', error.message);
+        }
+    }
+};
+
+
+
 module.exports = {
-    CreateRepositoryInGithub
+    CreateRepositoryInGithub,
+    FindRepository,
+    GetRepoInfo
 }
