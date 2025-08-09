@@ -44,6 +44,8 @@ const Home = () => {
             .catch((err) => {
                 console.log(err);
             })
+
+        
     };
 
     const toggleGithubInputs = () => {
