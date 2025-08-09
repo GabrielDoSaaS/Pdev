@@ -178,49 +178,60 @@ const CreateRepositoryInGithub = async (req, res) => {
 }
 
 const GetRepoInfo = async (req, res) => {
-    const { repoLink } = req.body;
+  const repoLinks = req.body;
 
-    const url = new URL(repoLink);
+  if (!Array.isArray(repoLinks) || repoLinks.length === 0) {
+    return res.status(400).json({
+      error: 'O corpo da requisição deve ser um array de links para repositórios.'
+    });
+  }
 
-    const pathParts = url.pathname.split('/');
+  const allRepoData = [];
 
-    const owner = pathParts[1];
-    const repo = pathParts[2];
-
-    const repoApiUrl = `https://api.github.com/repos/${owner}/${repo}`;
-
-    console.log('Dono:', owner);   
-    console.log('Repositório:', repo); 
-    console.log('URL da API:', repoApiUrl);
-
-
+  for (const repoLink of repoLinks) {
     try {
-        const response = await axios.get(repoApiUrl);
+      const url = new URL(repoLink);
+      const pathParts = url.pathname.split('/');
+      const owner = pathParts[1];
+      const repo = pathParts[2];
 
-        const repoData = response.data;
+      if (!owner || !repo) {
+        console.error(`Link inválido ou com formato incorreto: ${repoLink}`);
+        continue;
+      }
 
-        console.log('--- Informações do Repositório ---');
-        console.log(`Nome: ${repoData.name}`);
-        console.log(`Dono: ${repoData.owner.login}`);
-        console.log(`Descrição: ${repoData.description}`);
-        console.log(`URL: ${repoData.html_url}`);
-        console.log(`Estrelas (Stars): ${repoData.stargazers_count}`);
-        console.log(`Licença: ${repoData.license ? repoData.license.name : 'Nenhuma'}`);
-        console.log(`Linguagem Principal: ${repoData.language}`);
-        console.log(`Total de Forks: ${repoData.forks_count}`);
-        console.log(`Data de Criação: ${new Date(repoData.created_at).toLocaleDateString()}`);
-        console.log(`Última Atualização: ${new Date(repoData.updated_at).toLocaleDateString()}`);
-        console.log('------------------------------------');
+      const repoApiUrl = `https://api.github.com/repos/${owner}/${repo}`;
+      const response = await axios.get(repoApiUrl);
+      const repoData = response.data;
 
+      allRepoData.push({
+        name: repoData.name,
+        owner: repoData.owner.login,
+        description: repoData.description,
+        url: repoData.html_url,
+        stars: repoData.stargazers_count,
+        license: repoData.license ? repoData.license.name : 'Nenhuma',
+        language: repoData.language,
+        forks: repoData.forks_count,
+        createdAt: new Date(repoData.created_at).toLocaleDateString(),
+        updatedAt: new Date(repoData.updated_at).toLocaleDateString(),
+      });
 
     } catch (error) {
-        if (error.response) {
-            console.error(`Erro: ${error.response.status} - ${error.response.statusText}`);
-            console.error('Mensagem da API:', error.response.data.message);
-        } else {
-            console.error('Erro na requisição:', error.message);
-        }
+      if (error.response && error.response.status === 404) {
+        console.error(`Repositório não encontrado para o link: ${repoLink}`);
+      } else {
+        console.error(`Erro ao processar o link ${repoLink}:`, error.message);
+      }
+
+      allRepoData.push({
+        link: repoLink,
+        error: `Não foi possível obter informações do repositório.`,
+      });
     }
+  }
+  
+  res.status(200).json(allRepoData);
 };
 
 
