@@ -15,7 +15,7 @@ const Home = () => {
     const [sections, setSections] = useState<{ title: string, description: string }[]>([]);
     const [profileImage, setProfileImage] = useState<File | null>(null);
     const [profileImagePreview, setProfileImagePreview] = useState<string | null>(null);
-    const [selectedColors, setSelectedColors] = useState<string[]>([]);
+    const [selectedColor, setSelectedColor] = useState<string>('#000000');
 
     const handleAddLink = () => {
         setGithubLinks([...githubLinks, '']);
@@ -73,11 +73,7 @@ const Home = () => {
     };
 
     const handleColorSelection = (color: string) => {
-        if (selectedColors.includes(color)) {
-            setSelectedColors(selectedColors.filter(c => c !== color));
-        } else if (selectedColors.length < 3) {
-            setSelectedColors([...selectedColors, color]);
-        }
+        setSelectedColor(color);
     };
 
     return (
@@ -98,32 +94,32 @@ const Home = () => {
                     </div>
                 </div>
 
-        <div className={styles.section}>
-            <label htmlFor="profileImage" className={styles.label}>Adicione sua foto de perfil:</label>
-            <div className={styles.inputGroup}>
-                <label htmlFor="profileImage" className={styles.fileInputLabel}>
-                    {profileImage ? 'Mudar foto' : 'Escolher foto'}
-                </label>
-                <input
-                    id="profileImage"
-                    type="file"
-                    accept="image/*"
-                    onChange={handleProfileImageChange}
-                    className={styles.fileInput}
-                />
-                {profileImagePreview && (
-                    <img src={profileImagePreview} alt="Pré-visualização da foto de perfil" className={styles.profileImagePreview} />
-                )}
-            </div>
-        </div>
+                <div className={styles.section}>
+                    <label htmlFor="profileImage" className={styles.label}>Adicione sua foto de perfil:</label>
+                    <div className={styles.inputGroup}>
+                        <label htmlFor="profileImage" className={styles.fileInputLabel}>
+                            {profileImage ? 'Mudar foto' : 'Escolher foto'}
+                        </label>
+                        <input
+                            id="profileImage"
+                            type="file"
+                            accept="image/*"
+                            onChange={handleProfileImageChange}
+                            className={styles.fileInput}
+                        />
+                        {profileImagePreview && (
+                            <img src={profileImagePreview} alt="Pré-visualização da foto de perfil" className={styles.profileImagePreview} />
+                        )}
+                    </div>
+                </div>
 
                 <div className={styles.section}>
-                    <h2 className={styles.sectionTitle}>Escolha até 3 cores para o seu portfólio</h2>
+                    <h2 className={styles.sectionTitle}>Escolha uma cor principal para o seu portfólio</h2>
                     <div className={styles.colorPalette}>
                         {availableColors.map((color, index) => (
                             <div
                                 key={index}
-                                className={`${styles.colorCircle} ${selectedColors.includes(color) ? styles.selectedColor : ''}`}
+                                className={`${styles.colorCircle} ${selectedColor === color ? styles.selectedColor : ''}`}
                                 style={{ backgroundColor: color }}
                                 onClick={() => handleColorSelection(color)}
                             ></div>
