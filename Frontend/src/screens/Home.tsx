@@ -7,6 +7,8 @@ import axios from "axios";
 const Home = () => {
     const [githubLinks, setGithubLinks] = useState<string[]>(['']);
     const [showGithubInputs, setShowGithubInputs] = useState(false);
+    const [sectionCount, setSectionCount] = useState(0);
+    const [sections, setSections] = useState<{ title: string, description: string }[]>([]);
 
     const handleAddLink = () => {
         setGithubLinks([...githubLinks, '']);
@@ -23,22 +25,36 @@ const Home = () => {
         setGithubLinks(newLinks);
     };
 
-    const handleRepositories = async ( ) => {
+    const handleRepositories = async () => {
         await axios.post('http://localhost:3000/api/get-repo-info', JSON.stringify(
             githubLinks
         ), {
-            headers: {"Content-Type": "application/json"}
+            headers: { "Content-Type": "application/json" }
         })
-        .then((response)=>{
-            console.log(response.data);
-        })
-        .catch((err)=>{
-            console.log(err);
-        })
-    }
+            .then((response) => {
+                console.log(response.data);
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+    };
 
     const toggleGithubInputs = () => {
         setShowGithubInputs(!showGithubInputs);
+    };
+
+    const handleSectionCountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const count = parseInt(e.target.value, 10);
+        setSectionCount(isNaN(count) ? 0 : count);
+        setSections(
+            Array.from({ length: isNaN(count) ? 0 : count }, () => ({ title: '', description: '' }))
+        );
+    };
+
+    const handleSectionChange = (index: number, field: 'title' | 'description', value: string) => {
+        const newSections = [...sections];
+        newSections[index][field] = value;
+        setSections(newSections);
     };
 
     return (
@@ -97,7 +113,7 @@ const Home = () => {
                             <h3 className={styles.templateTitle}>Centralizado</h3>
                             <p className={styles.templateDescription}>Layout minimalista com foto e informações principais no centro.</p>
                         </div>
-                   
+
                         <div className={`${styles.templateCard} ${styles.template2}`}>
                             <div className={styles.templateSidebarPlaceholder}></div>
                             <div className={styles.templateContentPlaceholder}></div>
@@ -115,18 +131,56 @@ const Home = () => {
                 </div>
 
                 <div className={styles.section}>
-                    <label htmlFor="sections" className={styles.label}>Quantas seções terão o portfólio?</label>
+                    <label htmlFor="sections" className={styles.label}>Quantas seções terão o portfólio? (Sem contar com a seção de projetos)</label>
                     <div className={styles.inputGroup}>
                         <input
                             id="sections"
                             type="number"
                             placeholder="Ex: 5"
                             className={styles.input}
+                            value={sectionCount}
+                            onChange={handleSectionCountChange}
                         />
                     </div>
                 </div>
 
-                <button className={styles.submitButton} onClick={()=>handleRepositories()}>
+                {sections.length > 0 && (
+                    <div className={styles.section}>
+                        <h2 className={styles.sectionTitle}>Conteúdo das seções</h2>
+                        {sections.map((section, index) => (
+                            <div key={index} className={styles.section}>
+                                <label htmlFor={`sectionTitle-${index}`} className={styles.label}>
+                                    Título da seção {index + 1}:
+                                </label>
+                                <div className={styles.inputGroup}>
+                                    <input
+                                        id={`sectionTitle-${index}`}
+                                        type="text"
+                                        placeholder={`Título da seção ${index + 1}`}
+                                        className={styles.input}
+                                        value={section.title}
+                                        onChange={(e) => handleSectionChange(index, 'title', e.target.value)}
+                                    />
+                                </div>
+                                <label htmlFor={`sectionDescription-${index}`} className={styles.label}>
+                                    Descrição da seção {index + 1}:
+                                </label>
+                                <div className={styles.inputGroup}>
+                                    <textarea
+                                        id={`sectionDescription-${index}`}
+                                        placeholder={`Descrição detalhada da seção ${index + 1}`}
+                                        className={styles.input}
+                                        value={section.description}
+                                        onChange={(e) => handleSectionChange(index, 'description', e.target.value)}
+                                        rows={4}
+                                    />
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                )}
+
+                <button className={styles.submitButton} onClick={() => handleRepositories()}>
                     Continuar
                 </button>
             </div>
