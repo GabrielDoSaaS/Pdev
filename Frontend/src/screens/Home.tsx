@@ -2,6 +2,7 @@ import styles from "./Home.module.css";
 import { FiGithub } from "react-icons/fi";
 import { useState } from "react";
 import { FaMinusCircle, FaPlusCircle } from "react-icons/fa";
+import axios from "axios";
 
 const Home = () => {
     const [githubLinks, setGithubLinks] = useState<string[]>(['']);
@@ -21,6 +22,20 @@ const Home = () => {
         newLinks[index] = value;
         setGithubLinks(newLinks);
     };
+
+    const handleRepositories = async ( ) => {
+        await axios.post('http://localhost:3000/api/get-repo-info', JSON.stringify(
+            githubLinks
+        ), {
+            headers: {"Content-Type": "application/json"}
+        })
+        .then((response)=>{
+            console.log(response.data);
+        })
+        .catch((err)=>{
+            console.log(err);
+        })
+    }
 
     const toggleGithubInputs = () => {
         setShowGithubInputs(!showGithubInputs);
@@ -111,7 +126,7 @@ const Home = () => {
                     </div>
                 </div>
 
-                <button className={styles.submitButton}>
+                <button className={styles.submitButton} onClick={()=>handleRepositories()}>
                     Continuar
                 </button>
             </div>
