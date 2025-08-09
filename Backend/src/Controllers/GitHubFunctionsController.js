@@ -195,7 +195,7 @@ const GetRepoInfo = async (req, res) => {
 
 
     try {
-        const response = await axios.get(repoUrl);
+        const response = await axios.get(repoApiUrl);
 
         const repoData = response.data;
 
@@ -224,9 +224,7 @@ const GetRepoInfo = async (req, res) => {
 };
 
 
-
 module.exports = {
     CreateRepositoryInGithub,
-    FindRepository,
     GetRepoInfo
 }

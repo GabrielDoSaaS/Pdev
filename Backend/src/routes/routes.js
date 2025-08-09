@@ -10,5 +10,6 @@ routes.post('/api/register', RegisterController);
 routes.post('/api/login', LoginController);
 routes.post('/api/createStaticProject', RenderFunctionsController.CreateStaticSite);
 routes.post('/api/create-payment', StripeController.CreatePayment);
+routes.post('/api/get-repo-info', GitHubFunctionsController.GetRepoInfo);
 
 module.exports = routes;
